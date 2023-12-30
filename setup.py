@@ -1,4 +1,4 @@
-from setuptools import setup, find_packages
+""" from setuptools import setup, find_packages
 import codecs
 import os
 
@@ -21,4 +21,4 @@ setup(
     install_requires=['matplotlib', 'numpy'],
     keywords=['python', 'utility', 'robotics', 'qol'],
     classifiers=[]
-)
+) """

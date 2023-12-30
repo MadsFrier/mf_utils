@@ -1,2 +1,2 @@
-# mf_utils
+# mfutils
 A PyPI package for utility functions
