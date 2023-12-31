@@ -5,6 +5,14 @@ import matplotlib.pyplot as plt
 def rot2d(angle):
     return np.array([[np.cos(angle), -np.sin(angle)],
                      [np.sin(angle), np.cos(angle)]])
+    
+def rot3d(angle):
+    pass
+    
+def quat2rot():
+    pass
+def quat2euler():
+    pass
 
 # Plotting functions
 def plot_lidar_coords(lidar_coords_x, lidar_coords_y, marker='o', color='r'):
@@ -56,7 +64,7 @@ def plot_arrow(x, y, yaw, arrow_length=1.0,
 
 
 # Robotics functions
-def lidar_to_coords(robot_pose, lidar_data, lidar_fov, lidar_res):
+def lidar2coords(robot_pose, lidar_data, lidar_fov, lidar_res):
     '''
     Convert lidar data to coordinates
     '''
