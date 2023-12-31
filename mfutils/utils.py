@@ -1,18 +1,48 @@
+'''
+Authers:
+     - Mads Frier
+     - Søren Haugaard
+     - Christian Aleksander Hjorth
+'''
+
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 # Utility functions
-def rot2d(angle):
-    return np.array([[np.cos(angle), -np.sin(angle)],
-                     [np.sin(angle), np.cos(angle)]])
+def rot2d(rad):
+    return np.array([[np.cos(rad), -np.sin(rad)],
+                     [np.sin(rad), np.cos(rad)]])
+
+def rot3d_x(rad):
+    return np.array([[1.0, 0.0, 0.0],
+                     [0.0, np.cos(rad), -np.sin(rad)],
+                     [0.0, np.sin(rad), np.cos(rad)]])
     
-def rot3d(angle):
-    pass
+def rot3d_y(rad):
+    return np.array([[np.cos(rad), 0.0, np.sin(rad)],
+                     [0.0, 1.0, 0.0],
+                     [-np.sin(rad), 0.0, np.cos(rad)]])
+
+def rot3d_z(rad):
+    return np.array([[np.cos(rad), -np.sin(rad), 0.0],
+                     [np.sin(rad), np.cos(rad), 0.0],
+                     [0.0, 0.0, 1.0]])
+
+def quat2euler(x,y,z,w):
+    sinr_cosp = 2 * (w * x + y * z)
+    cosr_cosp = 1 - 2 * (x * x + y * y)
+    roll = np.arctan2(sinr_cosp, cosr_cosp)
+
+    sinp = 2 * (w * y - z * x)
+    pitch = np.arcsin(sinp)
+
+    siny_cosp = 2 * (w * z + x * y)
+    cosy_cosp = 1 - 2 * (y * y + z * z)
+    yaw = np.arctan2(siny_cosp, cosy_cosp)
     
-def quat2rot():
-    pass
-def quat2euler():
-    pass
+    return roll, pitch, yaw
+
 
 # Plotting functions
 def plot_lidar_coords(lidar_coords_x, lidar_coords_y, marker='o', color='r'):
@@ -64,7 +94,7 @@ def plot_arrow(x, y, yaw, arrow_length=1.0,
 
 
 # Robotics functions
-def lidar2coords(robot_pose, lidar_data, lidar_fov, lidar_res):
+def lidar2coords(robot_pose, lidar_data, lidar_fov, lidar_res, cw=True):
     '''
     Convert lidar data to coordinates
     '''
@@ -72,7 +102,14 @@ def lidar2coords(robot_pose, lidar_data, lidar_fov, lidar_res):
     lidar_x_list = []
     lidar_y_list = []
     
-    values = np.linspace(lidar_fov/2, -lidar_fov/2, lidar_res)
+    if cw:
+        val_1 = 1
+        val_2 = -1
+    elif cw == False:
+        val_1 = -1
+        val_2 = 1
+    
+    values = np.linspace(val_1 * lidar_fov/2, val_2 * lidar_fov/2, lidar_res)
     
     for i in range(512):
         lidar_x = robot_pose[0] + lidar_data[i]*(np.cos(robot_pose[2] + values[i]))
